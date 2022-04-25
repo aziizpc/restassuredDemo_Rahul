@@ -11,7 +11,7 @@ public class ComplexJsonParse_3 {
 
 	public static void main(String[] args) {
 
-		JsonPath js = new JsonPath(Payload.coursePrice());
+		JsonPath js = new JsonPath(Payload.coursePrice());	// Note
 
 		// Print number of courses returned by API
 		int count = js.getInt("courses.size()");
@@ -57,6 +57,7 @@ public class ComplexJsonParse_3 {
 		else {
 			System.out.println("Verification failed :(");
 		}
+		
 	}
-
+	
 }

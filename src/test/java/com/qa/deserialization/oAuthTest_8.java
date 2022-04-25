@@ -1,17 +1,24 @@
-// then() is not require always
+// DESERIALIZATION (Response Payload -> POJO)
+// Get the output as Java class and then we deal with GETTERS @ the END
 
-package com.qa.tests;
+package com.qa.deserialization;
 
 import static io.restassured.RestAssured.*;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.testng.Assert;
 
+import io.restassured.parsing.Parser;
 import io.restassured.path.json.JsonPath;
 
-public class oAuthTest_7 {
+public class oAuthTest_8 {
 
 	public static void main(String[] args) throws InterruptedException {
 		
@@ -29,7 +36,7 @@ public class oAuthTest_7 {
 //		Thread.sleep(5000);
 //		String url = driver.getCurrentUrl();
 		
-		String url = "https://rahulshettyacademy.com/getCourse.php?state=verifyfjdss&code=4%2F0AX4XfWidPO2In9mz541xuETE6K7czAD9PwAkOfrOzzhYjaJ7eBaNar5hGYogSyfNhLWw5A&scope=email+openid+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email&authuser=0&prompt=none"; // Passing the url directly after logging in manually :)
+		String url = "https://rahulshettyacademy.com/getCourse.php?state=verifyfjdss&code=4%2F0AX4XfWgslp-Kwd2r6BdRPJ1FbXxu3tFGN6MzzW2ROScpja4qRwdiVGpFkXYxOEIJcdp8CQ&scope=email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+openid&authuser=1&prompt=none"; // Passing the url directly after logging in manually :)
 		
 		String partialCode = url.split("code=")[1];
 		String code = partialCode.split("&scope")[0];
@@ -52,14 +59,48 @@ public class oAuthTest_7 {
 		System.out.println("Access Token: " + accessToken);
 			
 					
-		String response = 
+		GetCourse gc = 	// Note (Receive as Object)
 		given()
 			.queryParam("access_token", accessToken)
+			.expect().defaultParser(Parser.JSON)	// Note: As we are dealing with JSON
 		.when()
 			.get("https://rahulshettyacademy.com/getCourse.php")
-			.asString();	// Note: asString without 'extract' (No 'then()' too)
-		System.out.println(response);
-
+			.as(GetCourse.class);	// NOTE !!!!!
+		
+		// Print LinkedIn
+		System.out.println("LinkedIn: " + gc.getLinkedIn());
+		
+		// Print Instructor
+		System.out.println("Instructor: " + gc.getInstructor());
+		
+		// Print the second course name
+		System.out.println(gc.getCourses().getApi().get(1).getCourseTitle());		// getApi().get(1) as it's a List
+		
+		// Iteration: Get the price of 'SoapUI Webservices Testing' (We don't know the index)
+		List<Api> apiCourses = gc.getCourses().getApi();  
+		for (int i = 0 ; i < apiCourses.size() ; i++) {
+			if (apiCourses.get(i).getCourseTitle().equalsIgnoreCase("SoapUI Webservices Testing")) {
+				System.out.println(apiCourses.get(i).getPrice());
+			}
+		}
+		
+		// Print all the course titles in WebAutomation
+		List<WebAutomation> webAutomationCourses = gc.getCourses().getWebAutomation();
+		for (int i = 0 ; i < webAutomationCourses.size() ; i++) {
+			System.out.println(webAutomationCourses.get(i).getCourseTitle());
+		}
+		
+		// Check if the values are as expected
+		String[] expectedCourseTitles = {"Selenium Webdriver Java", "Cypress", "Protractor"};
+		ArrayList <String> webAutomationCourseTitles = new ArrayList<String>();
+		for (int i = 0 ; i < webAutomationCourses.size() ; i++) {
+			webAutomationCourseTitles.add(webAutomationCourses.get(i).getCourseTitle());
+		}
+		List<String> expectedCourseTitlesArrayList =  Arrays.asList(expectedCourseTitles);
+		
+		Assert.assertTrue(expectedCourseTitlesArrayList.equals(webAutomationCourseTitles)); // Order of the contents doesn't matter
+		
+		
 	}
 
 }

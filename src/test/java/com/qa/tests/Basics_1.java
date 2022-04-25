@@ -13,7 +13,7 @@ public class Basics_1 {
 		RestAssured.baseURI = "https://rahulshettyacademy.com";
 		given()
 			.log().all()
-			.queryParam("key", "qaclick123")
+			.queryParam("key", "qaclick123")	// KEY-VALUE auth
 			.header("Content-Type", "application/json")
 			.body(Payload.addPlace())
 		.when()

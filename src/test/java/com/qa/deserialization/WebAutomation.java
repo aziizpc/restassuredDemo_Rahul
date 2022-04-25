@@ -1,4 +1,4 @@
-package com.qa.pojo;
+package com.qa.deserialization;
 
 public class WebAutomation {
 	

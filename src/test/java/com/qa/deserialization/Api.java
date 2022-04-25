@@ -1,6 +1,6 @@
-package com.qa.pojo;
+package com.qa.deserialization;
 
-public class Mobile {
+public class Api {
 	
 	private String courseTitle;
 	private String price;

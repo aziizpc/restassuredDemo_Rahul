@@ -1,0 +1,16 @@
+{
+  "location": {
+    "lat": -43.383494,
+    "lng": 43.427362
+  },
+  "accuracy": 50,
+  "name": "Azeez House",
+  "phone_number": "(+91) 123 456 6789",
+  "address": "29, side layout, cohen 09",
+  "types": [
+    "shoe park",
+    "shop"
+  ],
+  "website": "http://google.com",
+  "language": "French-IN"
+}

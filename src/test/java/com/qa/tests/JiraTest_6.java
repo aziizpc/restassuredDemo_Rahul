@@ -1,5 +1,5 @@
-// Take away: Path Parameter	|	SessionFilter	| 	Sending Files and Header
-// .relaxedHTTPSValidation() method would be required while authentication in HTTPS server
+// Take away: Path Parameter	|	SessionFilter	| 	Sending Files and its Header
+// Note: .relaxedHTTPSValidation() method would be required while authentication in HTTPS server
 
 package com.qa.tests;
 
@@ -125,7 +125,7 @@ public class JiraTest_6 {
 		JsonPath js5 = ReusableMethods.rawToJson(getIssueResponse);
 		int commentsCount = js5.getInt("fields.comment.comments.size()");	// Get number of comments (Obviously, 1 in this case)
 		for (int i = 0 ; i < commentsCount ; i++) {
-			String commentId = js5.get("fields.comment.comments[" + i + "].id");	// Get each ID (We have ony one) 
+			String commentId = js5.get("fields.comment.comments[" + i + "].id");	// Get each ID (We have only one) 
 			System.out.println(commentId);	// Print the ID
 			if (commentId.equalsIgnoreCase(addCommentId)) {
 				String commentBody = js5.get("fields.comment.comments[" + i + "].body");
